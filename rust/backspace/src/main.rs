@@ -1,10 +1,14 @@
 use std::collections::VecDeque;
-use std::io;
+use std::{io, io::prelude::*};
 
-fn main() {
-    let stdin = io::stdin();
-    stdin.read_line(&mut line);
-    println!("{}", remove_less_than(line.unwrap()));
+pub type Error = Box<dyn std::error::Error + Send + Sync>;
+pub type Result<T> = std::result::Result<T, Error>;
+
+pub fn main() -> Result<()> {
+    for line in io::stdin().lock().lines() {
+        println!("{}", remove_less_than(line.unwrap()));
+    }
+    Ok(())
 }
 
 fn remove_less_than(input: String) -> String {
