@@ -10,14 +10,32 @@ pub fn main() {
     ()
 }
 
-fn handle_input(line1: &str, line2: &str) -> (u32, Vec<u32>) {
-    let parts1 = get_numbers(line1);
-    let parts2 = get_numbers(line2);
+fn handle_input(line1: &str, line2: &str) -> (u32, Vec<i32>) {
+    let parts1 = get_u32_numbers(line1);
+    let parts2 = get_i32_numbers(line2);
     let command : u32 = parts1[1];
     (command, parts2)
 }
 
-fn act_on_input(command: u32, numbers: Vec<u32>) -> String {
+fn get_u32_numbers(s: &str) -> Vec<u32> {
+    return s
+     .to_string()
+     .split_whitespace()
+     .map(|item| item.to_string().parse::<u32>())
+     .collect::<Result<Vec<_>, _>>()
+     .unwrap_or_else(|err| panic!("Failure during parse: {}", err));
+}
+
+fn get_i32_numbers(s: &str) -> Vec<i32> {
+    return s
+     .to_string()
+     .split_whitespace()
+     .map(|item| item.to_string().parse::<i32>())
+     .collect::<Result<Vec<_>, _>>()
+     .unwrap_or_else(|err| panic!("Failure during parse: {}", err));
+}
+
+fn act_on_input(command: u32, numbers: Vec<i32>) -> String {
     let result = match command {
         1 => "7".to_string(),
         2 => handle_2(&numbers).to_string(),
@@ -31,7 +49,7 @@ fn act_on_input(command: u32, numbers: Vec<u32>) -> String {
     result
 }
 
-fn handle_2(numbers: &Vec<u32>) -> &str {
+fn handle_2(numbers: &Vec<i32>) -> &str {
     if numbers[0] > numbers[1] {
         return "Bigger";
     }
@@ -41,8 +59,8 @@ fn handle_2(numbers: &Vec<u32>) -> &str {
     return "Equal";
 }
 
-fn handle_3(numbers: &Vec<u32>) -> String {
-    let mut first_3: Vec<u32> = numbers
+fn handle_3(numbers: &Vec<i32>) -> String {
+    let mut first_3: Vec<i32> = numbers
         .iter()
         .take(3)
         .copied()
@@ -51,30 +69,30 @@ fn handle_3(numbers: &Vec<u32>) -> String {
     return first_3.get(1).unwrap().to_string();
 }
 
-fn handle_4(numbers: &Vec<u32>) -> String {
+fn handle_4(numbers: &Vec<i32>) -> String {
     return numbers
         .iter()
-        .sum::<u32>()
+        .sum::<i32>()
         .to_string();
 }
 
-fn handle_5(numbers: &Vec<u32>) -> String {
+fn handle_5(numbers: &Vec<i32>) -> String {
     return numbers
       .iter()
       .filter( |&&x| x % 2 == 0 )
-      .sum::<u32>()
+      .sum::<i32>()
       .to_string();
 }
 
-fn handle_6(numbers: &Vec<u32>) -> String {
+fn handle_6(numbers: &Vec<i32>) -> String {
     return numbers
       .iter()
       .map( |&x| x % 26 )
-      .map( |x| ('a' as u32 + x) as u8 as char )
+      .map( |x| ('a' as u32).wrapping_add_signed(x) as u8 as char )
       .collect::<String>();
 }
 
-fn handle_7(numbers: &Vec<u32>) -> &str {
+fn handle_7(numbers: &Vec<i32>) -> &str {
     let mut visited: BTreeSet<usize> = BTreeSet::new();
     let size = numbers.len();
     let mut index: usize = 0;
@@ -91,15 +109,6 @@ fn handle_7(numbers: &Vec<u32>) -> &str {
             return "Cyclic";
         }
     }
-}
-
-fn get_numbers(s: &str) -> Vec<u32> {
-    return s
-     .to_string()
-     .split_whitespace()
-     .map(|item| item.to_string().parse::<u32>())
-     .collect::<Result<Vec<_>, _>>()
-     .unwrap_or_else(|err| panic!("Failure during parse: {}", err));
 }
 
 #[cfg(test)]
