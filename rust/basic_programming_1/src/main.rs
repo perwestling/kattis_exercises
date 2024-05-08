@@ -72,7 +72,8 @@ fn handle_3(numbers: &Vec<i32>) -> String {
 fn handle_4(numbers: &Vec<i32>) -> String {
     return numbers
         .iter()
-        .sum::<i32>()
+        .map( |&x| x as i64 )
+        .sum::<i64>()
         .to_string();
 }
 
@@ -80,7 +81,8 @@ fn handle_5(numbers: &Vec<i32>) -> String {
     return numbers
       .iter()
       .filter( |&&x| x % 2 == 0 )
-      .sum::<i32>()
+      .map( |&x| x as i64 )
+      .sum::<i64>()
       .to_string();
 }
 
