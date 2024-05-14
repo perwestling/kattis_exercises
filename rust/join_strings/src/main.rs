@@ -1,21 +1,22 @@
 use std::{io, io::BufRead};
 
+#[allow(unused)]
 pub fn main() {
     let mut stdin_iter = io::stdin().lock().lines();
     let mut strings : Vec<String> = Vec::new();
-    let mut indexes : Multimap<usize, usize> = Vec::new();
+    let mut indexes : Vec<Vec<usize>> = Vec::new();
     let mut final_line : usize = 0;
 
     let possible_line = stdin_iter.next();
     let count_line = possible_line.expect("Missing count line").unwrap();
     let count = get_usize_numbers(&count_line)[0];
-    
+
     // Read strings
     for i in 0..count {
         let possible_line = stdin_iter.next();
         let word = possible_line.expect("Missing word line").unwrap();
         strings.push(word);
-        indexes.insert(i, i);
+        indexes.push(Vec::new());
     }
     
     // Join strings
@@ -26,24 +27,26 @@ pub fn main() {
         }
         let command_line = possible_line.expect("Missing count line").unwrap();
         let numbers = get_usize_numbers(&command_line);
-        let target = numbers[0];
-        let source = numbers[1];
-        indexes.insert(target - 1, source - 1);
-        // act_on_input(target, numbers[1], &mut dictionary);
+        let target = numbers[0] - 1;
+        let source = numbers[1] - 1;
+        if let Some(inner_vector) = indexes.get_mut(target) {
+            inner_vector.push(source);
+        }
         final_line = target;
     }
 
-    let _ = io::stdout().lock();
-    print_recursive(final_line, &dictionary);
-    println!();
+
+    let mut result = String::with_capacity(100000);
+    print_recursive(final_line, &indexes, &strings, &mut result);
+    println!("{}", result);
 
     ()
 }
 
-fn print_recursive(index: usize, dictionary: &Multimap<usize, usize>) {
-    print!("{}", index);
-    for i in dictionary.get_vec(index) {
-        print_recursive(i, dictionary);
+fn print_recursive(index: usize, indexes: &Vec<Vec<usize>>, strings: &Vec<String>, result: &mut String) {
+    result.push_str(&strings[index]);
+    for &u in indexes[index].iter() {
+        print_recursive(u, indexes, strings, result);
     }
 }
 
