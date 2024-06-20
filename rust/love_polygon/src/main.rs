@@ -38,22 +38,31 @@ pub fn main() {
 
     // Remove all self lovers, counting one for each
     // Collect keys that need to be removed
-    let keys_to_remove: Vec<String> = map
+    let self_lovers: Vec<String> = map
         .iter()
         .filter(|(k, v)| k == v)
         .map(|(k, _)| k.clone())
         .collect();
     
     // Remove the collected keys, and increase operation count as this will require at least one operation.
-    for key in keys_to_remove {
-        println!("Remove {}", &key);
+    for key in self_lovers {
+        println!("Remove {}->{}", &key, &key);
         map.remove(&key);
         result += 1;
     }
 
     // Remove pairs, that is, where a->b and b->a. Remove a and b from names and map, to decrease scope.
-    let mutual_mappings = find_mutual_mappings(map);
-    for fullfilled = names
+    let mutual_mappings = find_mutual_mappings(&map);
+    println!("Mutual mapping: {:?}", mutual_mappings);
+    for key in mutual_mappings {
+        let Some(value) = map.get(&key);
+        println!("Remove {}->{} and {}->{}", &key, &value, &key, &value);
+        map.remove(&key);
+    }
+    println!("Remaining mapping:");
+    for (from, to) in map.iter() {
+        println!("'{}'->'{}'", from, to);
+    }
 
     // Go through values and store excesses per name (number of times above one)
     let excesses = count_excesses(map);
@@ -65,7 +74,7 @@ pub fn main() {
     ()
 }
 
-fn find_mutual_mappings(map: &HashMap<String, String>) -> HashSet<(String, String)> {
+fn find_mutual_mappings(map: &HashMap<String, String>) -> HashSet<String> {
     let mut mutual_mappings = HashSet::new();
 
     for (key, value) in map.iter() {
