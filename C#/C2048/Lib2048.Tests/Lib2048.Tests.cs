@@ -158,5 +158,73 @@ namespace Lib2048.Tests
                            "0 0 0 0",
                            "1 2 3 4"], board);
         }
+
+        [TestMethod]
+        public void TestLeftShouldMerge()
+        {
+            string[] boardLines = ["1 1 0 0",
+                                   "2 0 2 0",
+                                   "4 0 0 4",
+                                   "8 0 4 4"];
+
+            var board = Lib.ParseBoardLines(boardLines);
+            Lib.Play(ref board, Lib.Directions.Left);
+
+            CompareBoards(["2 0 0 0",
+                           "4 0 0 0",
+                           "8 0 0 0",
+                           "8 8 0 0"], board);
+        }
+
+        [TestMethod]
+        public void TestUpShouldMerge()
+        {
+            string[] boardLines = ["16 32 64 128",
+                                   "16 0 0 0",
+                                   "0 32 0 64",
+                                   "0 0 64 64"];
+
+            var board = Lib.ParseBoardLines(boardLines);
+            Lib.Play(ref board, Lib.Directions.Up);
+
+            CompareBoards(["32 64 128 128",
+                           "0 0 0 128",
+                           "0 0 0 0",
+                           "0 0 0 0"], board);
+        }
+
+        [TestMethod]
+        public void TestRightShouldMerge()
+        {
+            string[] boardLines = ["0 0 1 1",
+                                   "0 2 0 2",
+                                   "4 0 0 4",
+                                   "8 0 4 4"];
+
+            var board = Lib.ParseBoardLines(boardLines);
+            Lib.Play(ref board, Lib.Directions.Right);
+
+            CompareBoards(["0 0 0 2",
+                           "0 0 0 4",
+                           "0 0 0 8",
+                           "0 0 8 8"], board);
+        }
+
+        [TestMethod]
+        public void TestDownShouldMerge()
+        {
+            string[] boardLines = ["16 32 64 128",
+                                   "16 0 0 0",
+                                   "0 32 0 64",
+                                   "0 0 64 64"];
+
+            var board = Lib.ParseBoardLines(boardLines);
+            Lib.Play(ref board, Lib.Directions.Down);
+
+            CompareBoards(["0 0 0 0",
+                           "0 0 0 0",
+                           "0 0 0 128",
+                           "32 64 128 128"], board);
+        }
     }
 }

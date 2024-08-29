@@ -1,7 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
 
 namespace Lib2048
 {
@@ -12,7 +10,7 @@ namespace Lib2048
             public int X { get; init; } = x;
             public int Y { get; init; } = y;
 
-            public override string ToString() => String.Format("X:{0}, Y:{1}", X.ToString("+0;-#"), Y.ToString("+0;-#"));
+            public override string ToString() => string.Format("X:{0}, Y:{1}", X.ToString("+0;-#"), Y.ToString("+0;-#"));
         }
         public readonly struct Coords(int x, int y)
         {
@@ -31,7 +29,7 @@ namespace Lib2048
                 return 0 <= X && X <= 3 && 0 <= Y && Y <= 3;
             }
         }
-    
+
         public readonly struct Data(Lib.Coords start_coordinate, Lib.Delta group_delta, Lib.Delta pos_delta)
         {
             public Coords StartCoord { get; } = start_coordinate;
@@ -123,7 +121,7 @@ namespace Lib2048
         }
 
         // ToString for the 4 x 4 board
-        public static String BoardToString(int[,] board)
+        public static string BoardToString(int[,] board)
         {
             StringBuilder sb = new();
             for (int y = 3; y >= 0; y--) {
@@ -181,7 +179,29 @@ namespace Lib2048
 
         private static void Merge(ref int[,] board, Directions direction)
         {
+            Data dd = DirectionsData[direction];
+            for (int group_index = 0; group_index <= 3; group_index++)
+            {
+                Coords group_coord = dd.NextGroup( dd.StartCoord, group_index );
 
+                // From reverse side, check if a cell (except the last reverse one)
+                // is non zero and has the same number as its neighbor in the direction.
+                // If so merge them
+                for (int rev_pos_index = 2; rev_pos_index >= 0; rev_pos_index--)
+                {
+                    Coords pos_coord = dd.NextPos( group_coord, rev_pos_index );
+                    int value = Data.GetBoardCell(board, pos_coord);
+                    Coords next_coord = dd.NextPos( group_coord, rev_pos_index + 1 );
+                    int next_value = Data.GetBoardCell(board, next_coord);
+                    if (value > 0 && value == next_value)
+                    {
+                        // Merge them
+                        value *= 2;
+                        Data.PutBoardCell(ref board, next_coord, value);
+                        Data.PutBoardCell(ref board, pos_coord, 0);
+                    }
+                }
+            }
         }
     }
 }
