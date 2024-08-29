@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib2048", "Lib2048\Lib2048.csproj", "{BB2ED19E-FC47-461B-AECA-7F265002C842}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib2048.Tests", "Lib2048.Tests\Lib2048.Tests.csproj", "{0454AE1C-8A53-4B4B-AF44-FDA5277D527B}"
+EndProject
+Global
+        GlobalSection(SolutionConfigurationPlatforms) = preSolution
+                Debug|Any CPU = Debug|Any CPU
+                Release|Any CPU = Release|Any CPU
+        EndGlobalSection
+        GlobalSection(SolutionProperties) = preSolution
+                HideSolutionNode = FALSE
+        EndGlobalSection
+        GlobalSection(ProjectConfigurationPlatforms) = postSolution
+                {BB2ED19E-FC47-461B-AECA-7F265002C842}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+                {BB2ED19E-FC47-461B-AECA-7F265002C842}.Debug|Any CPU.Build.0 = Debug|Any CPU
+                {BB2ED19E-FC47-461B-AECA-7F265002C842}.Release|Any CPU.ActiveCfg = Release|Any CPU
+                {BB2ED19E-FC47-461B-AECA-7F265002C842}.Release|Any CPU.Build.0 = Release|Any CPU
+                {0454AE1C-8A53-4B4B-AF44-FDA5277D527B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+                {0454AE1C-8A53-4B4B-AF44-FDA5277D527B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+                {0454AE1C-8A53-4B4B-AF44-FDA5277D527B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+                {0454AE1C-8A53-4B4B-AF44-FDA5277D527B}.Release|Any CPU.Build.0 = Release|Any CPU
+        EndGlobalSection
+EndGlobal
